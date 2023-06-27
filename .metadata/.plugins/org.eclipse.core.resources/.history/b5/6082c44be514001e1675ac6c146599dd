@@ -1,0 +1,10 @@
+spring.datasource.url=jdbc:oracle:thin:@143.244.128.171:1539/mod5r
+spring.datasource.username=Mod5rAdmin
+spring.datasource.password=DevAdmin#123
+spring.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
+logging.level.root= = INFO 
+app.akasia.environment=dev
+app.akasia.bank-test-frequency=20000
+app.akasia.aml-validation-frequency=10000
+app.akasia.host=http://165.232.177.225:9091/v2
+app.akasia.access-token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtb2JpbGVVc2VyQHZhbGlnbml0LmNvbSIsImlhdCI6MTY4NjA0MDIyNH0.yCl0D0q_qq6p5-V80eAJjSLhm41z_n6cDUWoBew-_cI

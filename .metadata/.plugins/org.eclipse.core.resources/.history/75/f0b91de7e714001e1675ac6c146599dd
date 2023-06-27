@@ -1,0 +1,44 @@
+package com.akasia.investment.task;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.springframework.jdbc.core.RowMapper;
+
+public class CompanyMapper implements RowMapper<Company> {
+
+	@Override
+	public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+		// TODO Auto-generated method stub
+		Company company = new Company();
+		
+		company.setCompanyName(rs.getString("company_name"));
+		company.setCompanyNameAr(rs.getString("company_name_ar"));
+		company.setDefaultBankId(rs.getString("default_bank_id"));
+		company.setAlpacaUserId(rs.getString("alpaca_user_id"));
+		company.setAlpacaPassword(rs.getString("alpaca_password"));
+		company.setAlpacaAccessToken(rs.getString("alpaca_access_token"));
+		company.setAlpacaHost(rs.getString("alpaca_host"));
+		company.setFocalUserId(rs.getString("focal_user_id"));
+		company.setFocalPassword(rs.getString("focal_password"));
+		company.setFocalAccessToken(rs.getString("focal_access_token"));
+		company.setFocalHost(rs.getString("focal_host"));
+		company.setAlpacaAuthorizationType(rs.getString("alpaca_authorization_type"));
+		company.setFocalAuthorizationType(rs.getString("focal_authorization_type"));
+		company.setAkasiaHost(rs.getString("akasia_host"));
+		company.setCcoName(rs.getString("cco_name"));
+		company.setEdaatUserId(rs.getString("edaat_user_id"));
+		company.setEdaatPassword(rs.getString("edaat_password"));
+		company.setEdaatAccessToken(rs.getString("edaat_access_token"));
+		company.setEdaatHost(rs.getString("edaat_host"));
+		company.setEdaatAuthorizationType(rs.getString("edaat_authorization_type"));
+		company.setAnbUserId(rs.getString("anb_user_id"));
+		company.setAnbPassword(rs.getString("anb_password"));
+		company.setAnbAccessToken(rs.getString("anb_access_token"));
+		company.setAnbHost(rs.getString("anb_host"));
+		company.setAnbAuthorizationType(rs.getString("anb_authorization_type"));
+
+		return company;
+	}
+
+}

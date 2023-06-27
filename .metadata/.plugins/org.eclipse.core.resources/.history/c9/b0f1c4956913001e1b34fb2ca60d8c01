@@ -1,0 +1,13 @@
+package com.akasia.investment.task;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+public class AppProperties {
+	private String host;
+
+	public String getHost() {
+		return host;
+	}
+}

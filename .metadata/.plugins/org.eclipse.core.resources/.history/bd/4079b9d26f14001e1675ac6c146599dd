@@ -1,0 +1,69 @@
+package com.akasia.investment.task;
+
+import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.core.env.Environment;
+import org.springframework.dao.EmptyResultDataAccessException;
+
+public class FocalService extends ApplicationService{
+	@Autowired
+	private CompanyDao companyDao;
+
+	private String userId;
+	private String password;
+	
+	public FocalService(Environment environment) {
+		super(environment);
+		System.out.println("YYYYYYYY");
+
+		try {
+			Company company = companyDao.getCompany();
+			super.setHost(company.getFocalHost());
+			super.setAccessToken(company.getFocalAuthorizationType() + " " + company.getFocalAccessToken());
+			userId = company.getFocalUserId();
+			password = company.getFocalPassword();
+		}
+		catch (Exception e) {
+        	if ((e instanceof EmptyResultDataAccessException) != true)
+				System.out.println("XXXXXXXXX");
+        		return;
+		}
+		// TODO Auto-generated constructor stub
+		JSONObject jsonInputObject = new JSONObject();  
+		JSONObject jsonOutputObject = new JSONObject();  
+        try {
+			jsonOutputObject = postObject("/login/test-token", jsonInputObject);
+        	if (super.getResponseCode() == 200)
+        		return;
+        	if (super.getResponseCode() == 403) {
+				System.out.println("Token expired");
+				String inputString = "username=" + userId + "&" + "password=" + password;
+				System.out.println(inputString);
+	    		
+				jsonOutputObject = postFormObject("/login/access-token", inputString);
+	        	if (super.getResponseCode() == 200) {
+					System.out.println("Focal Ok");
+	        		return;
+	        	}
+		        else {
+					System.out.println("Focal Error1:" + super.getResponseCode());
+		        	return;
+		        }
+        	}
+	        else {
+				System.out.println("Focal Error2:" + super.getResponseCode());
+	        	return;
+	        }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+}

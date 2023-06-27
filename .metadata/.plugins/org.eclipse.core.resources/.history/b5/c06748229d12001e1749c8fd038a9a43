@@ -1,0 +1,24 @@
+package com.akasia.investment.task;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+public class CompanyDaoImpl implements CompanyDao {
+	JdbcTemplate jdbcTemplate;
+
+	private final String SQL_FIND_COMPANY = "select * from \"tab_company\"";
+
+	@Autowired
+	public CompanyDaoImpl(DataSource dataSource) {
+		jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+
+	@Override
+	public Company getCompany() {
+		// TODO Auto-generated method stub
+		return jdbcTemplate.queryForObject(SQL_FIND_COMPANY, new CompanyMapper());
+	}
+
+}

@@ -1,0 +1,30 @@
+package com.akasia.investment.task.akasia.bank;
+
+// Akasia Bank object
+public class AkasiaBank {
+	private String bankId; 
+	private	String bankName; 
+	private	String bankNameAr;
+	
+	public String getBankId() {
+		return bankId;
+	}
+	public void setBankId(Object object) {
+		this.bankId = object.toString();
+	}
+	public String getBankName() {
+		return bankName;
+	}
+	public void setBankName(Object object) {
+		this.bankName = object.toString();
+	}
+	public String getBankNameAr() {
+		return bankNameAr;
+	}
+	public void setBankNameAr(Object object) {
+		this.bankNameAr = object.toString();
+	}
+
+	public AkasiaBank() {
+	}
+}

@@ -1,0 +1,10 @@
+package com.akasia.investment.task;
+
+
+public class AppProperties {
+	private String host;
+
+	public String getHost() {
+		return this.host;
+	}
+}

@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "app.akasia.environment",
+    "type": "java.lang.String",
+    "description": "A description for 'app.akasia.environment'"
+  },
+  {
+    "name": "app.akasia.bank-validation-frequency",
+    "type": "java.lang.String",
+    "description": "A description for 'app.akasia.bank-validation-frequency'"
+  },
+  {
+    "name": "app.akasia.access-token",
+    "type": "java.lang.String",
+    "description": "A description for 'app.akasia.access-token'"
+  },
+  {
+    "name": "app.akasia.host",
+    "type": "java.lang.String",
+    "description": "A description for 'app.akasia.host'"
+  }
+]}

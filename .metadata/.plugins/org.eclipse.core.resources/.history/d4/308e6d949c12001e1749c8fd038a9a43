@@ -1,0 +1,11 @@
+package com.akasia.investment.task;
+
+public class CompanyDaoImpl implements CompanyDao {
+
+	@Override
+	public Company getCompany() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

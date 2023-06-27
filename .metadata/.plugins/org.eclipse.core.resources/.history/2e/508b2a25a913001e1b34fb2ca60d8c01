@@ -1,0 +1,85 @@
+package com.akasia.investment.task;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
+
+// Akasia Web Service APIs
+// Host and Access Token are obtained from the Environment object
+// Environment object is passed as a parameter to the constructor
+@Service
+public class AkasiaService extends ApplicationService{
+	private String host;
+	private String accessToken;
+
+	public AkasiaService(Environment environment, Company company) {
+		super(environment, company);
+		// TODO Auto-generated constructor stub
+		this.host = environment.getProperty("app.akasia.host");
+		this.accessToken = environment.getProperty("app.akasia.access-token");
+	}
+
+	/*
+	private Environment environment;
+	private Company company;
+	private String objectName;
+	private int responseCode;
+	*/
+	
+	// Akasia GET bank list API - returns list of AkasiaBank objects
+	public List <AkasiaBank> getBankList() throws IOException, JSONException {
+		System.out.println("Hello");
+		List<AkasiaBank> listAkasiaBank = new ArrayList<AkasiaBank>();
+   
+		JSONArray jsonArray = getObjectList("/bank");
+
+        for (int i = 0; i < jsonArray.length(); i++) {  
+        	JSONObject jsonObject = jsonArray.getJSONObject(i);
+            AkasiaBankMapper akasiaBankMapper = new AkasiaBankMapper();
+            AkasiaBank akasiaBank = akasiaBankMapper.mapJson(jsonObject);
+            listAkasiaBank.add(akasiaBank);
+        }
+        return listAkasiaBank;
+	}
+
+	// Akasia GET bank by Id API - returns AkasiaBank object
+	public AkasiaBank getBank(String bankId) throws IOException, JSONException {
+        AkasiaBank akasiaBank = null;
+        JSONObject jsonObject = getObject("/bank", bankId);
+        if (jsonObject != null) {
+        	AkasiaBankMapper akasiaBankMapper = new AkasiaBankMapper();
+        	akasiaBank = akasiaBankMapper.mapJson(jsonObject.getJSONObject("data"));
+        }
+		return akasiaBank;
+	}
+
+	// Akasia POST bank - returns AkasiaBank object
+	public AkasiaBank postBank(String jsonInputString) throws IOException, JSONException {
+        AkasiaBank akasiaBank = null;
+
+        JSONObject jsonOutputObject = postObject("/bank", jsonInputString);
+        if (jsonOutputObject != null) {
+        	AkasiaBankMapper akasiaBankMapper = new AkasiaBankMapper();
+        	akasiaBank = akasiaBankMapper.mapJson(jsonOutputObject.getJSONObject("data"));
+        }
+		return akasiaBank;
+	}
+
+	// Akasia POST bank - returns AkasiaBank object
+	public AkasiaBank postBank(JSONObject jsonInputObject) throws IOException, JSONException {
+        AkasiaBank akasiaBank = null;
+
+        JSONObject jsonOutputObject = postObject("/bank", jsonInputObject);
+        if (jsonOutputObject != null) {
+        	AkasiaBankMapper akasiaBankMapper = new AkasiaBankMapper();
+        	akasiaBank = akasiaBankMapper.mapJson(jsonOutputObject.getJSONObject("data"));
+        }
+		return akasiaBank;
+	}
+}

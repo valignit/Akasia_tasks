@@ -1,0 +1,47 @@
+package com.akasia.investment.task;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties(prefix="app.akasia")
+public class AppProperties {
+	private String environment;
+	private Integer bankTestFrequency;
+	private Integer amlValidationFrequency;
+	
+	private String host;
+	
+	private String accessToken;
+	
+	public String getEnvironment() {
+		return environment;
+	}
+	public void setEnvironment(String environment) {
+		this.environment = environment;
+	}
+	public Integer getBankTestFrequency() {
+		return bankTestFrequency;
+	}
+	public void setBankTestFrequency(Integer bankTestFrequency) {
+		this.bankTestFrequency = bankTestFrequency;
+	}
+	public Integer getAmlValidationFrequency() {
+		return amlValidationFrequency;
+	}
+	public void setAmlValidationFrequency(Integer amlValidationFrequency) {
+		this.amlValidationFrequency = amlValidationFrequency;
+	}
+	public String getHost() {
+		return host;
+	}
+	public void setHost(String host) {
+		this.host = host;
+	}
+	public String getAccessToken() {
+		return accessToken;
+	}
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+	public AppProperties() {
+	}
+}

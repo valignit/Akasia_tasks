@@ -1,0 +1,240 @@
+package com.akasia.investment.task;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.core.env.Environment;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
+// Scheduled task to test Bank Web service and Database accesss
+// executed as per the frequency specified in the application property
+@Component
+public class BankTestProc {
+    Logger log
+    = LoggerFactory.getLogger(BankTestProc.class);
+
+	@Autowired
+	private BankDao bankDao;
+
+	@Autowired
+	Environment environment;
+	
+	@Scheduled(fixedRateString = "${app.akasia.bank-validation-frequency}")
+	public void executeTask() throws IOException, JSONException {
+		log.info("");
+		log.info("------------");
+		log.info("BankTestProc");
+		log.info("------------");
+
+		//Call Akasia API Get Bank List
+		log.info("Akasia API Get Bank List");
+		AkasiaService akasiaService = new AkasiaService(environment);
+		List<AkasiaBank> akasiaBanks = null;
+		AkasiaBank akasiaBank = null;
+		String wrongBankId = "ARNBSARIXX";
+		String akasiaBankId;
+		String akasiaBankName;
+		List<Bank> banks = null;
+		Bank bank = null;
+		String databaseBankId;
+		String databaseBankName;
+        boolean retval = true;
+		
+		try {
+			akasiaBanks = akasiaService.getBankList();
+		}
+		catch (Exception e) {
+			return;
+		}
+		
+		if (akasiaService.responseCode == 200) {
+			for (int i = 0; i < akasiaBanks.size(); i++) {
+				akasiaBankId = akasiaBanks.get(i).getBankId();
+				akasiaBankName = akasiaBanks.get(i).getBankName();
+				log.info("akasiaBankId:" + akasiaBankId);
+				log.info("akasiaBankName:" + akasiaBankName);
+			}
+		}
+        
+		//Calling Akasia API Get Bank by Id
+		log.info("Akasia API Get Bank by Id");
+		try {
+			akasiaBank = akasiaService.getBank(wrongBankId);
+		}
+		catch (Exception e) {
+			return;
+		}
+
+		if (akasiaService.responseCode == 200) {
+			if (akasiaBank != null) {
+				akasiaBankId = akasiaBank.getBankId();
+				akasiaBankName = akasiaBank.getBankName();
+				log.info("akasiaBankId:" + akasiaBankId);
+				log.info("akasiaBankName:" + akasiaBankName);
+			}
+		}
+
+		//Calling Akasia API Post Bank
+		log.info("Akasia API Post Bank");
+
+		class JsonPayload {String bank_id; String bank_name; String bank_name_ar;};
+		JsonPayload jsonPayload = new JsonPayload();
+		jsonPayload.bank_id = "SSS";
+		jsonPayload.bank_name = "Service Bank";
+		jsonPayload.bank_name_ar = "Service Bank Arabic";
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		String jsonInputString = ow.writeValueAsString(jsonPayload);
+
+		//String jsonInputString = "{\"bank_id\":\"SSS\",\"bank_name\":\"Service Bank\",\"bank_name_ar\":\"Service Bank Arabic\"}"; 
+		try {
+			akasiaBank = akasiaService.postBank(jsonInputString);
+		}
+		catch (Exception e) {
+			return;
+		}
+
+		if (akasiaService.responseCode == 200) {
+			if (akasiaBank != null) {
+				akasiaBankId = akasiaBank.getBankId();
+				akasiaBankName = akasiaBank.getBankName();
+				log.info("akasiaBankId:" + akasiaBankId);
+				log.info("akasiaBankName:" + akasiaBankName);
+			}
+		}
+			
+		//Calling Database get Bank List
+		log.info("Database Get Bank List");
+		try {
+			banks = bankDao.getAllBanks();
+		}
+        catch (Exception e) {
+        	if ((e instanceof EmptyResultDataAccessException) != true)
+        		return;
+		}
+        
+		for (int i = 0; i < banks.size(); i++) {
+			databaseBankId = banks.get(i).getBankId();
+			databaseBankName = banks.get(i).getBankName();
+			log.info("databaseBankId:" + databaseBankId);
+			log.info("databaseBankName:" + databaseBankName);
+		}			
+
+		//Calling Database Get Bank by wrong Id
+		log.info("Database Get Bank by Id");
+		bank = null;
+		try {
+			bank = bankDao.getBankById("GGG");
+		}
+		catch (Exception e) {
+        	if ((e instanceof EmptyResultDataAccessException) != true)
+        		return;
+		}
+
+		//Calling Database Get Bank by Id
+		log.info("Database Get Bank by Id");
+		bank = null;
+		try {
+			bank = bankDao.getBankById("YYY");
+		}
+		catch (Exception e) {
+        	if ((e instanceof EmptyResultDataAccessException) != true)
+        		return;
+		}
+
+		//Calling Database Create Bank
+		log.info("Database Create Bank");
+
+		if (bank == null) {
+			Bank bank1 = new Bank();
+			bank1.setBankId("YYY");
+			bank1.setBankName("YYYYYY");
+			bank1.setBankNameAr("YYYYYY");
+			bank1.setBankAbbr("yy");
+			try {
+				retval = bankDao.createBank(bank1);
+			}
+			catch (Exception e) {
+	        	if ((e instanceof EmptyResultDataAccessException) != true)
+	        		return;
+			}
+			log.info("Bank:" + bank1.getBankId() + " created in database");
+			
+			Bank bank2 = new Bank();
+			bank2.setBankId("ZZZ");
+			bank2.setBankName("ZZZZZZ");
+			bank2.setBankNameAr("ZZZZZZ");
+			bank2.setBankAbbr("zz");
+			try {
+				retval = bankDao.createBank(bank2);
+			}
+			catch (Exception e) {
+	        	if ((e instanceof EmptyResultDataAccessException) != true)
+	        		return;
+			}
+			log.info("Bank:" + bank2.getBankId() + " created in database");
+		}
+
+		bank = null;
+		try {
+			bank = bankDao.getBankById("YYY");
+		}
+		catch (Exception e) {
+        	if ((e instanceof EmptyResultDataAccessException) != true)
+        		return;
+		}
+
+		String abbr;
+
+		if (bank != null) {
+			if (bank.getBankAbbr().equals("YY1"))
+					abbr = "YY2";
+				else
+					abbr = "YY1";
+			bank.setBankAbbr(abbr);
+			//Calling Database Update Bank
+			log.info("Database Update Bank");
+			try {
+				retval = bankDao.updateBank(bank);
+			}
+			catch (Exception e) {
+	        	if ((e instanceof EmptyResultDataAccessException) != true)
+	        		return;
+			}
+			if (retval)
+				log.info("Bank updated");
+		}
+		
+		bank = null;
+		try {
+			bank = bankDao.getBankById("SSS");
+		}
+		catch (Exception e) {
+        	if ((e instanceof EmptyResultDataAccessException) != true)
+        		return;
+		}
+		
+		if (bank != null) {
+			//Calling Database Delete Bank
+			log.info("Database Delete Bank");
+			try {
+				retval = bankDao.deleteBank(bank);
+			}
+			catch (Exception e) {
+	        	if ((e instanceof EmptyResultDataAccessException) != true)
+	        		return;
+			}
+			if (retval)
+				log.info("Bank deleted");
+		}
+	}
+}
+

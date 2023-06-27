@@ -1,0 +1,13 @@
+2023-06-18 14:52:06.018  INFO 9540 --- [main] c.a.investment.task.TaskApplication      : Starting TaskApplication using Java 17.0.4.1 on Ghouseam-LT with PID 9540 (C:\Spring Boot Projects\demo\task\target\classes started by Administrator in C:\Spring Boot Projects\demo\task)
+2023-06-18 14:52:06.020  INFO 9540 --- [main] c.a.investment.task.TaskApplication      : No active profile set, falling back to 1 default profile: "default"
+2023-06-18 14:52:06.346  INFO 9540 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2023-06-18 14:52:06.356  INFO 9540 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 JDBC repository interfaces.
+2023-06-18 14:52:06.664  INFO 9540 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-06-18 14:52:06.669  WARN 9540 --- [main] com.zaxxer.hikari.util.DriverDataSource  : Registered driver with driverClassName=oracle.jdbc.driver.OracleDriver was not found, trying direct instantiation.
+2023-06-18 14:52:07.635  INFO 9540 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-06-18 14:52:07.751  INFO 9540 --- [scheduling-1] com.akasia.investment.task.BankTestProc  : xxx
+2023-06-18 14:52:07.754  INFO 9540 --- [main] c.a.investment.task.TaskApplication      : Started TaskApplication in 2.045 seconds (JVM running for 2.605)
+2023-06-18 14:52:27.751  INFO 9540 --- [scheduling-1] com.akasia.investment.task.BankTestProc  : xxx
+2023-06-18 14:52:34.954  INFO 9540 --- [RMI TCP Connection(2)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2023-06-18 14:52:34.958  INFO 9540 --- [RMI TCP Connection(2)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-06-18 14:52:35.518  INFO 9540 --- [RMI TCP Connection(2)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

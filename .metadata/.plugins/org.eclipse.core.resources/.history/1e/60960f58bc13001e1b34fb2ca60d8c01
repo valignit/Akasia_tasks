@@ -1,0 +1,50 @@
+package com.akasia.investment.task;
+
+import java.io.IOException;
+
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.core.env.Environment;
+
+public class FocalService extends ApplicationService{
+
+	public FocalService(Environment environment, Company company) {
+		super(environment, company);
+		// TODO Auto-generated constructor stub
+		super.setHost(company.getFocalHost());
+		super.setAccessToken(company.getFocalAuthorizationType() + " " + company.getFocalAccessToken());
+
+		JSONObject jsonInputObject = new JSONObject();  
+		JSONObject jsonOutputObject = new JSONObject();  
+        try {
+			jsonOutputObject = postObject("/login/test-token", jsonInputObject);
+        	if (super.getResponseCode() == 200)
+        		return;
+        	if (super.getResponseCode() == 403) {
+				System.out.println("Token expired");
+	    		jsonInputObject.put("username", company.getFocalUserId());
+	    		jsonInputObject.put("password", company.getFocalPassword());	
+				jsonOutputObject = postObject("/login/access-token", jsonInputObject);
+	        	if (super.getResponseCode() == 200) {
+					System.out.println("Focal Ok");
+	        		return;
+	        	}
+		        else {
+					System.out.println("Focal Error1:" + super.getResponseCode());
+		        	return;
+		        }
+        	}
+	        else {
+				System.out.println("Focal Error2:" + super.getResponseCode());
+	        	return;
+	        }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+}

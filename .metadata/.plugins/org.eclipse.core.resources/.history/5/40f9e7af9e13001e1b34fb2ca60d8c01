@@ -1,0 +1,224 @@
+package com.akasia.investment.task;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+
+// Akasia Web Service APIs
+// Host and Access Token are obtained from the Environment object
+// Environment object is passed as a parameter to the constructor
+
+public class AkasiaService {
+	private Environment environment;
+	private Company company;
+	private String ObjectName;
+	private String Host;
+	private String AccessToken;
+	private int responseCode;
+	
+	// Akasia GET bank list API - returns list of AkasiaBank objects
+	public List <AkasiaBank> getBankList() throws IOException, JSONException {
+		System.out.println("Hello");
+		List<AkasiaBank> listAkasiaBank = new ArrayList<AkasiaBank>();
+   
+		JSONArray jsonArray = getObjectList("/bank");
+
+        for (int i = 0; i < jsonArray.length(); i++) {  
+        	JSONObject jsonObject = jsonArray.getJSONObject(i);
+            AkasiaBankMapper akasiaBankMapper = new AkasiaBankMapper();
+            AkasiaBank akasiaBank = akasiaBankMapper.mapJson(jsonObject);
+            listAkasiaBank.add(akasiaBank);
+        }
+        return listAkasiaBank;
+	}
+
+	// Akasia GET bank by Id API - returns AkasiaBank object
+	public AkasiaBank getBank(String bankId) throws IOException, JSONException {
+        AkasiaBank akasiaBank = null;
+        JSONObject jsonObject = getObject("/bank", bankId);
+        if (jsonObject != null) {
+        	AkasiaBankMapper akasiaBankMapper = new AkasiaBankMapper();
+        	akasiaBank = akasiaBankMapper.mapJson(jsonObject.getJSONObject("data"));
+        }
+		return akasiaBank;
+	}
+
+	// Akasia POST bank - returns AkasiaBank object
+	public AkasiaBank postBank(String jsonInputString) throws IOException, JSONException {
+        AkasiaBank akasiaBank = null;
+
+        JSONObject jsonOutputObject = postObject("/bank", jsonInputString);
+        if (jsonOutputObject != null) {
+        	AkasiaBankMapper akasiaBankMapper = new AkasiaBankMapper();
+        	akasiaBank = akasiaBankMapper.mapJson(jsonOutputObject.getJSONObject("data"));
+        }
+		return akasiaBank;
+	}
+
+	// Akasia POST bank - returns AkasiaBank object
+	public AkasiaBank postBank(JSONObject jsonInputObject) throws IOException, JSONException {
+        AkasiaBank akasiaBank = null;
+
+        JSONObject jsonOutputObject = postObject("/bank", jsonInputObject);
+        if (jsonOutputObject != null) {
+        	AkasiaBankMapper akasiaBankMapper = new AkasiaBankMapper();
+        	akasiaBank = akasiaBankMapper.mapJson(jsonOutputObject.getJSONObject("data"));
+        }
+		return akasiaBank;
+	}
+
+	// Akasia GET object list API - returns list of Akasia objects
+	public JSONArray getObjectList(String objectName) throws IOException, JSONException {
+		JSONArray jsonArray = null;
+		URL url = new URL(environment.getProperty("app.akasia.host") + objectName);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		con.setRequestProperty("Authorization", environment.getProperty("app.akasia.access-token"));
+		//con.setRequestProperty("Authorization", appProperties.getAccessToken());
+
+		responseCode = con.getResponseCode();
+		if (responseCode == HttpURLConnection.HTTP_OK) { // success
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			String responseString;
+			responseString = response.toString();
+			JSONObject jsonObject = new JSONObject(responseString);
+			jsonArray = jsonObject.getJSONArray("data");
+		}
+		return jsonArray;
+	}
+	
+	// Akasia GET object by Id API - returns Akasia object
+	public JSONObject getObject(String objectName, String objectId) throws IOException, JSONException {		
+		URL url = new URL(environment.getProperty("app.akasia.host") + objectName + "/" + objectId);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		con.setRequestProperty("Authorization", environment.getProperty("app.akasia.access-token"));
+
+		responseCode = con.getResponseCode();
+		if (responseCode != HttpURLConnection.HTTP_OK)
+			return null;
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		String responseString;
+		responseString = response.toString();
+		if (responseString.isBlank())
+			return null;
+		JSONObject jsonObject = new JSONObject(responseString);
+        
+		return jsonObject;
+	}
+
+	// Akasia POST object - returns Akasia object
+	public JSONObject postObject(String objectName, String jsonInputString) throws IOException, JSONException {		
+		URL url = new URL(environment.getProperty("app.akasia.host") + objectName);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("POST");
+		con.setRequestProperty("Authorization", environment.getProperty("app.akasia.access-token"));
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Accept", "application/json");
+		con.setDoOutput(true);
+		
+		try(OutputStream os = con.getOutputStream()) {
+		    byte[] input = jsonInputString.getBytes("utf-8");
+		    os.write(input, 0, input.length);			
+		}
+		
+		responseCode = con.getResponseCode();
+		if (responseCode != HttpURLConnection.HTTP_OK)
+			return null;
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		String responseString;
+		responseString = response.toString();
+		if (responseString.isBlank())
+			return null;
+		JSONObject jsonOutputObject = new JSONObject(responseString);
+        
+		return jsonOutputObject;
+	}
+
+	public JSONObject postObject(String objectName, JSONObject jsonInputObject) throws IOException, JSONException {		
+		URL url = new URL(environment.getProperty("app.akasia.host") + objectName);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("POST");
+		con.setRequestProperty("Authorization", environment.getProperty("app.akasia.access-token"));
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setRequestProperty("Accept", "application/json");
+		con.setDoOutput(true);
+		
+		try(OutputStream os = con.getOutputStream()) {
+		    byte[] input = jsonInputObject.toString().getBytes("utf-8");
+		    os.write(input, 0, input.length);			
+		}
+		
+		responseCode = con.getResponseCode();
+		if (responseCode != HttpURLConnection.HTTP_OK)
+			return null;
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		String responseString;
+		responseString = response.toString();
+		if (responseString.isBlank())
+			return null;
+		JSONObject jsonOutputObject = new JSONObject(responseString);
+        
+		return jsonOutputObject;
+	}
+
+	// Returns response code after a recent API call
+	public int getResponseCode() {
+		return(responseCode);
+	}	
+
+	// Constructor for AkasiaService
+	// Since application.properties cannot be accessed by AkasisService, they are obtained by the task
+	// and passed to the AkasiaService as Envionment Object constructor parameter 
+	public AkasiaService(Environment environment, Company company) {
+		this.environment = environment;
+	}	
+	
+}

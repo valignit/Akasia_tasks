@@ -1,0 +1,12 @@
+package com.akasia.investment.task;
+
+import org.springframework.core.env.Environment;
+
+public class FocalService extends ApplicationService{
+
+	public FocalService(Environment environment, Company company) {
+		super(environment, company);
+		// TODO Auto-generated constructor stub
+	}
+
+}
