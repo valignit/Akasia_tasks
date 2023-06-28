@@ -4,6 +4,10 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 // Akasia Bank object - Json mapper 
+/**
+ * @author Administrator
+ *
+ */
 public class AkasiaBankMapper {
 	AkasiaBank akasiaBank = new AkasiaBank();
 	

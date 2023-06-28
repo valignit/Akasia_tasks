@@ -5,6 +5,10 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
+/**
+ * @author Administrator
+ *
+ */
 public class CompanyMapper implements RowMapper<Company> {
 
 	@Override

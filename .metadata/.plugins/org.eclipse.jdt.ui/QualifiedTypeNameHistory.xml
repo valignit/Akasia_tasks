@@ -26,14 +26,18 @@
     <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.ObjectWriter"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.ObjectMapper"/>
     <fullyQualifiedTypeName name="org.springframework.boot.configurationprocessor.json.JSONObject"/>
-    <fullyQualifiedTypeName name="com.akasia.investment.task.AkasiaBank"/>
-    <fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
     <fullyQualifiedTypeName name="org.springframework.boot.context.properties.ConfigurationProperties"/>
     <fullyQualifiedTypeName name="org.springframework.context.annotation.Configuration"/>
     <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Value"/>
     <fullyQualifiedTypeName name="org.springframework.context.annotation.Bean"/>
-    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
-    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Repository"/>
     <fullyQualifiedTypeName name="java.net.http.HttpHeaders"/>
+    <fullyQualifiedTypeName name="com.akasia.investment.task.AkasiaBank"/>
+    <fullyQualifiedTypeName name="com.akasia.investment.task.Bank"/>
+    <fullyQualifiedTypeName name="com.akasia.investment.task.Company"/>
+    <fullyQualifiedTypeName name="com.akasia.investment.task.AkasiaService"/>
+    <fullyQualifiedTypeName name="com.akasia.investment.task.FocalService"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
 </qualifiedTypeNameHistroy>

@@ -6,6 +6,10 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 // Bank object - Database mapper 
+/**
+ * @author Administrator
+ *
+ */
 public class BankMapper implements RowMapper<Bank> {
 
 	@Override

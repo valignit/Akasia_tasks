@@ -14,9 +14,12 @@ import com.akasia.investment.task.akasia.bank.AkasiaBank;
 import com.akasia.investment.task.akasia.bank.AkasiaBankMapper;
 import com.akasia.investment.task.company.CompanyDao;
 
-// Akasia Web Service APIs
 // Host and Access Token are obtained from the Environment object
 // Environment object is passed as a parameter to the constructor
+/**
+ * @author Administrator
+ * Akasia Application API consumer class
+ */
 @Service
 public class AkasiaService extends ApplicationService{
 

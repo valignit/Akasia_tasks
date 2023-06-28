@@ -1,0 +1,60 @@
+package com.akasia.investment.task.company;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+
+@Component
+public class CompanyDaoImpl implements CompanyDao {
+	JdbcTemplate jdbcTemplate;
+
+	private final String SQL_FIND_COMPANY = "select * from \"tab_company\"";
+	private final String SQL_UPDATE_COMPANY = "update \"tab_company\" set \"company_name\" = ?, \"company_name_ar\" = ?, \"default_bank_id\" = ?, \"alpaca_user_id\" = ?, \"alpaca_password\" = ?, \"alpaca_access_token\" = ?, \"alpaca_host\" = ?, \"focal_user_id\" = ?, \"focal_password\" = ?, \"focal_access_token\" = ?, \"focal_host\" = ?, \"alpaca_authorization_type\" = ?, \"focal_authorization_type\" = ?, \"akasia_host\" = ?, \"cco_name\" = ?, \"edaat_user_id\" = ?, \"edaat_password\" = ?, \"edaat_access_token\" = ?, \"edaat_host\" = ?, \"edaat_authorization_type\" = ?, \"anb_user_id\" = ?, \"anb_password\" = ?, \"anb_access_token\" = ?, \"anb_host\" = ?, \"anb_authorization_type\" = ?";
+	
+	@Autowired
+	public CompanyDaoImpl(DataSource dataSource) {
+		jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+
+	@Override
+	public Company getCompany() {
+		// TODO Auto-generated method stub
+		return jdbcTemplate.queryForObject(SQL_FIND_COMPANY, new CompanyMapper());
+	}
+
+	@Override
+	public boolean updateCompany(Company company) {
+		// TODO Auto-generated method stub
+		return jdbcTemplate.update(
+				SQL_UPDATE_COMPANY, 
+				company.getCompanyName(),
+				company.getCompanyNameAr(),
+				company.getDefaultBankId(),
+				company.getAlpacaUserId(),
+				company.getAlpacaPassword(),
+				company.getAlpacaAccessToken(),
+				company.getAlpacaHost(),
+				company.getFocalUserId(),
+				company.getFocalPassword(),
+				company.getFocalAccessToken(),
+				company.getFocalHost(),
+				company.getAlpacaAuthorizationType(),
+				company.getFocalAuthorizationType(),
+				company.getAkasiaHost(),
+				company.getCcoName(),
+				company.getEdaatUserId(),
+				company.getEdaatPassword(),
+				company.getEdaatAccessToken(),
+				company.getEdaatHost(),
+				company.getEdaatAuthorizationType(),
+				company.getAnbUserId(),
+				company.getAnbPassword(),
+				company.getAnbAccessToken(),
+				company.getAnbHost(),
+				company.getAnbAuthorizationType()
+				) > 0;
+	}
+
+}

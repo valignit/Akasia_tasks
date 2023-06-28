@@ -16,23 +16,29 @@ import org.springframework.stereotype.Service;
 
 import com.akasia.investment.task.company.CompanyDao;
 
+/**
+ * @author Administrator
+ * Base class for all the external application services such as Focal, Alpaca, etc
+ * Extended by the specific service classes of each external application
+ */
 @Service
 public class ApplicationService {
-	private Environment environment;
-	private CompanyDao companyDao;
-	//private Company company;
-	private String objectName;
 	private String host;
 	private String accessToken;
 	private int responseCode;
 
-	// Application GET object list API - returns list of Application object
+	/**
+	 * Fetch list of object
+	 * @param Name of the object within the respective application eg: bank, company, etc
+	 * @return Array of JSONObject
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public JSONArray getObjectList(String objectName) throws IOException, JSONException {
 		JSONArray jsonArray = null;
 		URL url = new URL(host + objectName);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
-		//con.setRequestProperty("Authorization", environment.getProperty("app.akasia.access-token"));
 		con.setRequestProperty("Authorization", accessToken);
 
 		responseCode = con.getResponseCode();
@@ -54,12 +60,18 @@ public class ApplicationService {
 		return jsonArray;
 	}
 	
-	// Application GET object by Id API - returns Application object
+	/**
+	 * Fetch specific object by Id
+	 * @param objectName - Name of the object within the respective application eg: bank, company, etc
+	 * @param objectId - Unique id of the object to be fetched
+	 * @return JSONObject of Fetched object contents
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public JSONObject getObject(String objectName, String objectId) throws IOException, JSONException {		
 		URL url = new URL(host + objectName + "/" + objectId);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
-		//con.setRequestProperty("Authorization", environment.getProperty("app.akasia.access-token"));
 		con.setRequestProperty("Authorization", accessToken);
 
 		responseCode = con.getResponseCode();
@@ -83,6 +95,14 @@ public class ApplicationService {
 		return jsonObject;
 	}
 	
+	/**
+	 * Insert the Object (using JSONObject input)
+	 * @param objectName - Name of the object within the respective application eg: bank, company, etc
+	 * @param jsonInputObject - Object to be inserted
+	 * @return JSONObject of inserted Object
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public JSONObject postObject(String objectName, JSONObject jsonInputObject) throws IOException, JSONException {		
 		System.out.println(host + " " + objectName + " " + accessToken);
 		URL url = new URL(host + objectName);
@@ -120,7 +140,15 @@ public class ApplicationService {
 		return jsonOutputObject;
 	}
 
-	public JSONObject postFormObject(String objectName, String inputString) throws IOException, JSONException {		
+	/**
+	 * Insert the Object (using string parameters as input)
+	 * @param objectName - Name of the object within the respective application eg: bank, company, etc
+	 * @param inputString - Fields of object to be inserted
+	 * @return JSONObject of inserted Object
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public JSONObject postObject(String objectName, String inputString) throws IOException, JSONException {		
 		System.out.println(host + " " + objectName);
 		URL url = new URL(host + objectName);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -128,8 +156,6 @@ public class ApplicationService {
 		con.setRequestMethod("POST");
 		con.setRequestProperty("Authorization", accessToken);
 		con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		
-		//con.setRequestProperty("Content-Type", "application/json");
 		con.setRequestProperty("Accept", "application/json");
 		con.setDoOutput(true);
 		
@@ -172,10 +198,6 @@ public class ApplicationService {
 	// and passed as constructor parameter 
 
 	public ApplicationService(Environment environment, CompanyDao companyDao) {
-		this.environment = environment;
-		this.companyDao = companyDao;
-		//this.host = environment.getProperty("app.akasia.host");
-		//this.accessToken = environment.getProperty("app.akasia.access-token");
 	}
 
 	public String getHost() {

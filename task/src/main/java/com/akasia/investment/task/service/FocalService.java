@@ -10,6 +10,10 @@ import org.springframework.core.env.Environment;
 import com.akasia.investment.task.company.Company;
 import com.akasia.investment.task.company.CompanyDao;
 
+/**
+ * @author Administrator
+ * Focal Application API consumer class
+ */
 public class FocalService extends ApplicationService{
 
 	public FocalService(Environment environment, CompanyDao companyDao) {
@@ -30,7 +34,7 @@ public class FocalService extends ApplicationService{
 				String inputString = "username=" + company.getFocalUserId() + "&" + "password=" + company.getFocalPassword();
 				System.out.println(inputString);
 	    		
-				jsonOutputObject = postFormObject("/login/access-token", inputString);
+				jsonOutputObject = postObject("/login/access-token", inputString);
 	        	if (super.getResponseCode() == 200) {
 					System.out.println("Focal Ok");
 					String token = jsonOutputObject.getString("access_token");

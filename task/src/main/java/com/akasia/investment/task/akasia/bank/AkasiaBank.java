@@ -1,6 +1,10 @@
 package com.akasia.investment.task.akasia.bank;
 
 // Akasia Bank object
+/**
+ * @author Administrator
+ *
+ */
 public class AkasiaBank {
 	private String bankId; 
 	private	String bankName; 

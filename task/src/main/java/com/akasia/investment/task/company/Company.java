@@ -2,6 +2,10 @@ package com.akasia.investment.task.company;
 
 import org.springframework.stereotype.Repository;
 
+/**
+ * @author Administrator
+ *
+ */
 @Repository
 public class Company {
 	private String companyName;

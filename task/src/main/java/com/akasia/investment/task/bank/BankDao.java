@@ -2,6 +2,10 @@ package com.akasia.investment.task.bank;
 
 import java.util.List;
 
+/**
+ * @author Administrator
+ *
+ */
 public interface BankDao {
 	Bank getBankById(String bankId);
 

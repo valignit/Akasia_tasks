@@ -3,6 +3,10 @@ package com.akasia.investment.task.bank;
 import org.springframework.stereotype.Repository;
 
 // Bank Object
+/**
+ * @author Administrator
+ *
+ */
 @Repository
 public class Bank {
 	private String bankId; 
